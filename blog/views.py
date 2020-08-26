@@ -3,9 +3,11 @@ from django.shortcuts import get_object_or_404, redirect, render, render_to_resp
 from .forms import RegisterForm, PostForm
 from django.urls import reverse
 from django.utils import timezone
-from .models import Post, about, experience, education, skills, award
+from .models import Post, about
 from django.contrib.auth.models import User
-from django.http import Http404  
+from django.http import Http404 
+import markdown 
+import re
 
 # Create your views here.
 
@@ -42,8 +44,20 @@ def register(request):
     return render(request, 'blog/register.html', context={'form': form})
 
 
+
+
+
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    
+    md = markdown.markdown(extensions=[
+        'markdown.extensions.extra',
+        'markdown.extensions.codehilite',
+        'markdown.extensions.toc',
+    ])
+    post.text = md.convert(post.text)
+    m = re.search(r'<div class="toc">\s*<ul>(.*)</ul>\s*</div>', md.toc, re.S)
+    post.toc = m.group(1) if m is not None else ''
     return render(request, 'blog/post_detail.html', {'post': post})
 
 
@@ -69,14 +83,6 @@ def post_new(request):
     return render(request, 'blog/post_edit.html', {'form': form})
 
 
-def cv(request):
-    Edit = request.user.is_staff
-    about_ = about.objects.all()
-    skills_ = skills.objects.all()
-    experience_ = experience.objects.all()
-    education_ = education.objects.all()
-    award_ = award.objects.all()
-    return render(request, 'blog/cv.html', {'about': about_, 'skills': skills_, 'experience': experience_, 'education': education_, 'award': award_, 'edit':Edit})
 
 
 def post_edit(request, pk):
@@ -106,27 +112,8 @@ def post_remove(request, pk):
     post.delete()
     return redirect('profile')
 
-def cv_edit(request):
-    about_ = about.objects.all()
-    skills_ = skills.objects.all()
-    experience_ = experience.objects.all()
-    education_ = education.objects.all()
-    award_ = award.objects.all()
-    if not request.session.get('is_login', None):
-        return redirect('login')
-    elif not (request.user.is_staff):
-        raise Http404
-    if request.method == "POST":
-        form1 = PostForm(request.POST, instance=about)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            return redirect('post_detail', pk=post.pk)
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+
+
 
 
        

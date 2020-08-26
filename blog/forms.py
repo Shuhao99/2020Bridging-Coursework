@@ -20,3 +20,6 @@ class PostForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-control'}),
             
         }
+
+
+

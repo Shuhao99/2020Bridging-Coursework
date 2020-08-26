@@ -1,2 +1,9 @@
 myvenv/*
 .vscode/*
+mysite/__pycache__/*
+blog/__pycache__/*
+__init__.py
+db.sqlite3
+geckodriver.log
+__pycache__
+*.pyc
