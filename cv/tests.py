@@ -19,10 +19,11 @@ class CVPageTest(TestCase):
         )
 
         self.experience = experience.objects.create(
-            experience_title = 'Test title',
-            experience_text = 'Test text',
-            experience_date_start = 'Test start date',
-            experience_date_end = 'Test end date'
+            experience_title = 'Test experience title',
+            experience_text = 'Test experience text',
+            experience_name = 'Test experience name',
+            experience_date_start = 'Test experience start date',
+            experience_date_end = 'Test experience end date'
         )
 
         self.education = education.objects.create(
@@ -43,8 +44,8 @@ class CVPageTest(TestCase):
         
         # Prepare URL for unittest
         self.url = '/cv/'
-        self.url_add_new = '/cv/edit/'
-        self.url_new_experience = '/cv/edit/experience/'
+        self.url_add_new = '/cv/new/'
+        self.url_new_experience = '/cv/new/experience/'
 
     # Model test
     def test_model_test_about(self):
@@ -90,18 +91,57 @@ class CVPageTest(TestCase):
         # Now cv edit option should show up
         response = self.client.get(self.url_add_new)
         self.assertTemplateUsed(response, 'cv/cv_edit.html')
-        
-    def test_staff_can_save_a_POST_request(self):
-        response = self.client.post(self.url_new_experience, data={
+
+
+    def test_staff_an_experience_POST(self):
+        # Staff login
+        response = self.client.post('/login/', {'username': self.user.username, 'password': 'admin'})
+        # Make new post
+        response = self.client.post(self.url_new_experience,data={
+            'part':'experience',
             'experience_title':'University of Nottingham',
             'experience_name':'Summer Research',
             'experience_text':'Apply NLP tech in order classify',
-            'experience_date_start' = 'June 2019'
-            'experience_date_end' = 'August 2019'
+            'experience_date_start': 'June 2019',
+            'experience_date_end':'August 2019'
         })
-        self.assertIn('University of Nottingham', response.content.decode())
+        # Experience has two objects because one object has been created in Setup
+        self.assertEqual(experience.objects.count(),2)
+        new_experience = experience.objects.all()[1]
+        self.assertEqual(new_experience.experience_title,'University of Nottingham')
+        self.assertEqual(new_experience.experience_name,'Summer Research')
+
+             
+    def test_redirect_after_post(self):
+        # Staff login
+        response = self.client.post('/login/', {'username': self.user.username, 'password': 'admin'})
+        # Make new post
+        response = self.client.post(self.url_new_experience, data={
+            'part':'experience',
+            'experience_title':'University of Nottingham',
+            'experience_name':'Summer Research',
+            'experience_text':'Apply NLP tech in order classify',
+            'experience_date_start': 'June 2019',
+            'experience_date_end':'August 2019'
+        })
+        # Check if the new content be added
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'],'/cv/')
+    
+    
+    def test_desplay_all_experience_items(self):
+        # we have already create an experience at the beginning
+        response = self.client.get('/cv/')
+        self.assertIn('Test experience title', response.content.decode())
+        self.assertIn('Test experience text', response.content.decode())
+        self.assertIn('Test experience name', response.content.decode())
+        self.assertIn('Test experience end date', response.content.decode())
+        self.assertIn('Test experience start date', response.content.decode())
+
 
         
+
+
         
 
     

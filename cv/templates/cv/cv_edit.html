@@ -20,12 +20,10 @@
         <!-- Contact Section Form-->
         <div class="row">
             <div class="btn-group col-md-12 col-lg-12" role="group" aria-label="Basic example">
-
-                <a class="btn btn-primary" href="\cv\edit\about" role="button">about</a>
-                <a class="btn btn-primary" href="\cv\edit\experience" role="button">experience</a>
-                <a class="btn btn-primary" href="\cv\edit\skills" role="button">skills</a>
-                <a class="btn btn-primary" href="\cv\edit\education" role="button">education</a>
-                <a class="btn btn-primary" href="\cv\edit\award" role="button">award</a>
+                <a class="btn btn-primary" href="{% url 'new_experience' part='experience'%}" role="button">experience</a>
+                <a class="btn btn-primary" href="{% url 'new_skills' part='skills'%}" role="button">skills</a>
+                <a class="btn btn-primary" href="{% url 'new_education' part='education'%}" role="button">education</a>
+                <a class="btn btn-primary" href="{% url 'new_award' part='award'%}" role="button">award</a>
 
             </div>
         </div>

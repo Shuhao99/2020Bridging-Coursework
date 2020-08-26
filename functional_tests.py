@@ -9,12 +9,11 @@ class NewVisitorTest(unittest.TestCase):
     def setUp(self):  
         self.browser = webdriver.Firefox()
         self.url = 'http://localhost:8000/cv'
-        self.url_edit = 'http://localhost:8000/cv/edit/'
-        self.url_new_about = 'http://localhost:8000/cv/edit/about'
-        self.url_new_experience = 'http://localhost:8000/cv/edit/experience'
-        self.url_new_skills = 'http://localhost:8000/cv/edit/skills'
-        self.url_new_education = 'http://localhost:8000/cv/edit/education'
-        self.url_new_award = 'http://localhost:8000/cv/edit/award'
+        self.url_edit = 'http://localhost:8000/cv/new/'
+        self.url_new_experience = 'http://localhost:8000/cv/new/experience'
+        self.url_new_skills = 'http://localhost:8000/cv/new/skills'
+        self.url_new_education = 'http://localhost:8000/cv/new/education'
+        self.url_new_award = 'http://localhost:8000/cv/new/award'
         
 
     def tearDown(self):  
@@ -85,7 +84,6 @@ class NewVisitorTest(unittest.TestCase):
         title = self.browser.find_element_by_tag_name('h2')
         self.assertEqual('CHOOSE CONTENT TO ADD!', title.text)
 
-        about = self.browser.find_element_by_link_text('about')
         experience = self.browser.find_element_by_link_text('experience')
         education = self.browser.find_element_by_link_text('education')
         skills = self.browser.find_element_by_link_text('skills')
@@ -151,6 +149,9 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.find_element_by_xpath('//*[contains(text(), "September 2017")]')
         self.browser.find_element_by_xpath('//*[contains(text(), "July 2021")]')
         
+    def test_4_delete_education(self):  
+    
+    def test_5_edit_education(self):
     
 if __name__ == '__main__':  
     unittest.main(warnings='ignore')

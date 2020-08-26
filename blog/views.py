@@ -44,9 +44,6 @@ def register(request):
     return render(request, 'blog/register.html', context={'form': form})
 
 
-
-
-
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     
