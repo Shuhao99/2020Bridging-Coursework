@@ -9,9 +9,6 @@ from django.http import Http404
 import markdown 
 import re
 
-# Create your views here.
-
-
 def post_list(request):
     posts = Post.objects.filter(
         published_date__lte=timezone.now()).order_by('published_date')
@@ -20,41 +17,23 @@ def post_list(request):
 
 
 def register(request):
-    # 只有当请求为 POST 时，才表示用户提交了注册信息
     if request.method == 'POST':
-        # request.POST 是一个类字典数据结构，记录了用户提交的注册信息
-        # 这里提交的就是用户名（username）、密码（password）、邮箱（email）
-        # 用这些数据实例化一个用户注册表单
         form = RegisterForm(request.POST)
-
-        # 验证数据的合法性
         if form.is_valid():
-            # 如果提交数据合法，调用表单的 save 方法将用户数据保存到数据库
             form.save()
-
-            # 注册成功，跳转回首页
             return redirect('/')
     else:
-        # 请求不是 POST，表明用户正在访问注册页面，展示一个空的注册表单给用户
         form = RegisterForm()
-
-    # 渲染模板
-    # 如果用户正在访问注册页面，则渲染的是一个空的注册表单
-    # 如果用户通过表单提交注册信息，但是数据验证不合法，则渲染的是一个带有错误信息的表单
     return render(request, 'blog/register.html', context={'form': form})
 
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    
-    md = markdown.markdown(extensions=[
+    post.text = markdown.markdown(post.text, extensions=[
         'markdown.extensions.extra',
         'markdown.extensions.codehilite',
         'markdown.extensions.toc',
     ])
-    post.text = md.convert(post.text)
-    m = re.search(r'<div class="toc">\s*<ul>(.*)</ul>\s*</div>', md.toc, re.S)
-    post.toc = m.group(1) if m is not None else ''
     return render(request, 'blog/post_detail.html', {'post': post})
 
 
