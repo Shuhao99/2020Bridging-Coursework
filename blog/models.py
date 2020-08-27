@@ -22,8 +22,8 @@ class Post(models.Model):
     
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     header_img = models.ImageField(null = True, blank=True, upload_to="images/")
-    title = models.CharField(max_length=12)
-    excerpt = models.CharField(max_length=300, blank = True)
+    title = models.CharField(max_length=50)
+    excerpt = models.CharField(max_length=500, blank = True)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
