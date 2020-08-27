@@ -167,7 +167,7 @@
                             {% if user.is_authenticated %}
                             {% if user.is_staff %}
                             <br><br>
-                            <a class="btn btn-dark btn-sm"
+                            <a id = "edit_button" class="btn btn-dark btn-sm"
                                 href="{% url 'edit_education' id=content.id part='education'%}" role="button"
                                 style="border-Radius: 20px;"><svg width="1em" height="1em" viewBox="0 0 16 16"
                                     class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -185,7 +185,7 @@
                                     <path fill-rule="evenodd"
                                         d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z" />
                                 </svg></a>
-                            <a class="btn btn-danger btn-sm"
+                            <a id = "delete_button" class="btn btn-danger btn-sm"
                                 href="{% url 'remove_education' id=content.id part='education'%}" role="button"
                                 style="border-Radius: 20px;"><svg width="1em" height="1em" viewBox="0 0 16 16"
                                     class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

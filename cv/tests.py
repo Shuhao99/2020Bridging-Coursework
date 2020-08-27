@@ -46,6 +46,8 @@ class CVPageTest(TestCase):
         self.url = '/cv/'
         self.url_add_new = '/cv/new/'
         self.url_new_experience = '/cv/new/experience/'
+        self.url_delete_experience = '/cv/remove/experience/'
+        self.url_edit_experience = '/cv/edit/experience/'
 
     # Model test
     def test_model_test_about(self):
@@ -137,6 +139,62 @@ class CVPageTest(TestCase):
         self.assertIn('Test experience name', response.content.decode())
         self.assertIn('Test experience end date', response.content.decode())
         self.assertIn('Test experience start date', response.content.decode())
+    
+    
+    def test_delete_experience(self):
+        # Staff login
+        response = self.client.post('/login/', {'username': self.user.username, 'password': 'admin'})
+        # Delete designated post
+        self.assertEqual(experience.objects.count(), 1)
+        self.url_delete_experience = self.url_delete_experience + str(self.experience.id) + '/'
+        response = self.client.post(self.url_delete_experience, {'part':'experience'}) 
+        # Check if the post has been deleted
+        self.assertEqual(experience.objects.count(), 0)
+    
+    
+    def test_delete_experience_not_login(self):
+        # Try to delete
+        self.url_delete_experience = self.url_delete_experience + str(self.experience.id) + '/'
+        response = self.client.post(self.url_delete_experience, {'part':'experience'})
+        # Check if guest be redirect to login
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'],'/login/')
+        # Check if the object number does not decrease
+        self.assertEqual(experience.objects.count(), 1)
+    
+    def test_edit_experience(self):
+        # Staff login
+        response = self.client.post('/login/', {'username': self.user.username, 'password': 'admin'})
+        # Edit experience
+        self.url_edit_experience = self.url_edit_experience + str(self.experience.id) + '/'
+        response = self.client.post(self.url_edit_experience, data={
+            'part':'experience',
+            'experience_title':'EDIT_title',
+            'experience_name':'EDIT_name',
+            'experience_text':'EDIT_text',
+            'experience_date_start': 'EDIT_start',
+            'experience_date_end':'EDIT_end'
+        })
+        # Check if edit
+        response = self.client.get('/cv/')
+        self.assertIn('EDIT_title', response.content.decode())
+        self.assertIn('EDIT_name', response.content.decode())
+
+    def test_guest_edit_experience(self):
+        # Edit experience
+        self.url_edit_experience = self.url_edit_experience + str(self.experience.id) + '/'
+        response = self.client.post(self.url_edit_experience, data={
+            'part':'experience',
+            'experience_title':'EDIT_title',
+            'experience_name':'EDIT_name',
+            'experience_text':'EDIT_text',
+            'experience_date_start': 'EDIT_start',
+            'experience_date_end':'EDIT_end'
+        })
+        # Guest should be redirect
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'],'/login/')
+
 
 
         
