@@ -29,6 +29,7 @@ class Post(models.Model):
     published_date = models.DateTimeField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, blank=True)
+    is_slide = models.BooleanField(default=False)
 
     def publish(self):
         self.published_date = timezone.now()
