@@ -15,11 +15,11 @@ urlpatterns = [
     path('edit/experience/<int:id>/', views.edit, {'part':'experience'},name='edit_experience'),
     path('edit/skills/<int:id>/', views.edit, {'part':'skills'},name='edit_skills'),
     path('edit/education/<int:id>/', views.edit, {'part':'education'},name='edit_education'),
-    path('edit/award/<int:id>/', views.edit, {'part':'award'},name='edit_about'),
+    path('edit/award/<int:id>/', views.edit, {'part':'award'},name='edit_award'),
     #delete
     path('remove/experience/<int:id>/', views.remove, {'part':'experience'},name='remove_experience'),
     path('remove/skills/<int:id>/', views.remove, {'part':'skills'},name='remove_skills'),
     path('remove/education/<int:id>/', views.remove, {'part':'education'},name='remove_education'),
-    path('remove/award/<int:id>/', views.remove, {'part':'award'},name='remove_about'),
+    path('remove/award/<int:id>/', views.remove, {'part':'award'},name='remove_award'),
 ]
 
