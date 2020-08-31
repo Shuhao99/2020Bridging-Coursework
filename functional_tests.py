@@ -15,13 +15,7 @@ class NewVisitorTest(unittest.TestCase):
         self.url_new_education = 'http://localhost:8000/cv/new/education/'
         self.url_new_award = 'http://localhost:8000/cv/new/award/'
 
-        # Create a super user
-        self.user = User.objects.create_superuser(
-            username='admin_test', 
-            email='admin@hellogithub.com', 
-            password='admin')
         
-
     def tearDown(self):  
         self.browser.quit()
 
@@ -66,8 +60,8 @@ class NewVisitorTest(unittest.TestCase):
         login = self.browser.find_element_by_tag_name('button')
         
         #login as staff
-        username.send_keys('admin_test')
-        password.send_keys('admin')
+        username.send_keys('admin')
+        password.send_keys('990903')
         login.click()
         time.sleep(1)
 
@@ -107,8 +101,8 @@ class NewVisitorTest(unittest.TestCase):
         login = self.browser.find_element_by_tag_name('button')
         
         # Login as staff
-        username.send_keys('admin_test')
-        password.send_keys('admin')
+        username.send_keys('admin')
+        password.send_keys('990903')
         login.click()
         time.sleep(1)
 
@@ -163,8 +157,8 @@ class NewVisitorTest(unittest.TestCase):
         username = self.browser.find_element_by_name("username")
         password = self.browser.find_element_by_name("password")
         login = self.browser.find_element_by_tag_name('button')
-        username.send_keys('admin_test')
-        password.send_keys('admin')
+        username.send_keys('admin')
+        password.send_keys('990903')
         login.click()
         time.sleep(1)
 
@@ -205,8 +199,8 @@ class NewVisitorTest(unittest.TestCase):
         username = self.browser.find_element_by_name("username")
         password = self.browser.find_element_by_name("password")
         login = self.browser.find_element_by_tag_name('button')
-        username.send_keys('admin_test')
-        password.send_keys('admin')
+        username.send_keys('admin')
+        password.send_keys('990903')
         login.click()
         time.sleep(1)
         
